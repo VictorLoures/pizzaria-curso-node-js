@@ -5,6 +5,7 @@ import { DetailUserController } from "./controllers/user/DetailUserController";
 import { isAuthenticated } from "./middlewares/isAuthenticated";
 import { CreatecategoryController } from "./controllers/category/CreatecategoryController";
 import { ListCategoryController } from "./controllers/category/ListCategoryController";
+import { CreateProductController } from "./controllers/product/CreateProductController";
 
 const router = Router();
 
@@ -22,5 +23,8 @@ router.post(
 );
 
 router.get("/category", isAuthenticated, new ListCategoryController().handle);
+
+// Rotas product
+router.post("/product", isAuthenticated, new CreateProductController().handle);
 
 export { router };
