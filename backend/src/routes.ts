@@ -17,6 +17,7 @@ import { RemoveItemController } from "./controllers/order/RemoveItemController";
 import { SendOrderController } from "./controllers/order/SendOrderController";
 import { ListOrderController } from "./controllers/order/ListOrderController";
 import { DetailOrderController } from "./controllers/order/DetailOrderController";
+import { FinishOrderController } from "./controllers/order/FinishOrderController";
 
 const router = Router();
 const upload = multer(uploadConfig.upload("./tmp"));
@@ -65,6 +66,11 @@ router.get(
   "/order/detail",
   isAuthenticated,
   new DetailOrderController().handle
+);
+router.put(
+  "/order/finish",
+  isAuthenticated,
+  new FinishOrderController().handle
 );
 
 export { router };
