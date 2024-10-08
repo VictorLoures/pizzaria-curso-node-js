@@ -4,6 +4,7 @@ import logoImg from "/public/logo.svg";
 import Link from "next/link";
 import { api } from "@/services/api";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default function Page() {
   const handleLogin = async (formData: FormData) => {
@@ -19,6 +20,12 @@ export default function Page() {
         password,
       });
       if (!response.data.token) return;
+      cookies().set("session", response.data.token, {
+        maxAge: 60 * 60 * 24 * 30 * 1000,
+        path: "/",
+        httpOnly: false,
+        secure: process.env.NODE_ENV === "production",
+      });
     } catch (err) {
       console.log(err);
       return;
