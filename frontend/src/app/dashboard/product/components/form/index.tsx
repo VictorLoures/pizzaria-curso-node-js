@@ -5,8 +5,9 @@ import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/app/dashboard/components/button";
 import { api } from "@/services/api";
-import { headers } from "next/headers";
 import { getCookieClient } from "@/lib/cookieClient";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface CategoriesProps {
   id: string;
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function Form({ categories }: Props) {
+  const router = useRouter();
   const [image, setImage] = useState<File>();
   const [previewImage, setPreviewImage] = useState<string>("");
 
@@ -36,7 +38,10 @@ export function Form({ categories }: Props) {
     const price = formData.get("price");
     const description = formData.get("description");
 
-    if (!categoryIndex || !name || !price || !description || !image) return;
+    if (!categoryIndex || !name || !price || !description || !image) {
+      toast.warning("Preencha todos os campos!");
+      return;
+    }
 
     const data = new FormData();
     data.append("name", name);
@@ -54,6 +59,9 @@ export function Form({ categories }: Props) {
       .catch((err) => {
         console.log(err);
       });
+
+    toast.success("Produto cadastrado com sucesso!");
+    router.push("/dashboard");
   }
 
   return (
