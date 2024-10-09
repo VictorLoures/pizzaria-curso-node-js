@@ -3,6 +3,7 @@ import { UploadCloud } from "lucide-react";
 import styles from "./styles.module.scss";
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
+import { Button } from "@/app/dashboard/components/button";
 
 export function Form() {
   const [image, setImage] = useState<File>();
@@ -21,7 +22,7 @@ export function Form() {
     <main className={styles.container}>
       <h1>Novo produto</h1>
       <form action="" className={styles.form}>
-        <label htmlFor="" className={styles.labelImage}>
+        <label className={styles.labelImage}>
           <span>
             <UploadCloud size={30} color="#FFF" />
           </span>
@@ -44,6 +45,39 @@ export function Form() {
             />
           )}
         </label>
+
+        <select name="category">
+          <option key={1} value={1}>
+            Pizzas
+          </option>
+          <option key={2} value={2}>
+            Pizzas
+          </option>
+        </select>
+
+        <input
+          type="text"
+          name="name"
+          placeholder="Digite o nome do produto..."
+          required
+          className={styles.input}
+        />
+        <input
+          type="text"
+          name="price"
+          placeholder="Digite o preço do produto..."
+          required
+          className={styles.input}
+        />
+
+        <textarea
+          name="description"
+          placeholder="Digite a descrição do produto..."
+          required
+          className={styles.input}
+        ></textarea>
+
+        <Button name="Cadastrar" />
       </form>
     </main>
   );
