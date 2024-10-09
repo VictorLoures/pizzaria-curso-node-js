@@ -20,7 +20,7 @@ export default async function Dashboard() {
   const orders = await getOrders();
   return (
     <>
-      <Orders />
+      <Orders orders={orders} />
     </>
   );
 }
