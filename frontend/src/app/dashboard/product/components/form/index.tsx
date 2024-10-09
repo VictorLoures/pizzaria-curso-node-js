@@ -4,8 +4,20 @@ import styles from "./styles.module.scss";
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/app/dashboard/components/button";
+import { api } from "@/services/api";
+import { headers } from "next/headers";
+import { getCookieClient } from "@/lib/cookieClient";
 
-export function Form() {
+interface CategoriesProps {
+  id: string;
+  name: string;
+}
+
+interface Props {
+  categories: CategoriesProps[];
+}
+
+export function Form({ categories }: Props) {
   const [image, setImage] = useState<File>();
   const [previewImage, setPreviewImage] = useState<string>("");
 
@@ -18,10 +30,36 @@ export function Form() {
     }
   };
 
+  async function handleRegisterProduct(formData: FormData) {
+    const categoryIndex = formData.get("category");
+    const name = formData.get("name");
+    const price = formData.get("price");
+    const description = formData.get("description");
+
+    if (!categoryIndex || !name || !price || !description || !image) return;
+
+    const data = new FormData();
+    data.append("name", name);
+    data.append("price", price);
+    data.append("description", description);
+    data.append("category_id", categories[Number(categoryIndex)].id);
+    data.append("file", image);
+
+    await api
+      .post("/product", data, {
+        headers: {
+          Authorization: `Bearer ${getCookieClient()}`,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   return (
     <main className={styles.container}>
       <h1>Novo produto</h1>
-      <form action="" className={styles.form}>
+      <form action={handleRegisterProduct} className={styles.form}>
         <label className={styles.labelImage}>
           <span>
             <UploadCloud size={30} color="#FFF" />
@@ -47,12 +85,11 @@ export function Form() {
         </label>
 
         <select name="category">
-          <option key={1} value={1}>
-            Pizzas
-          </option>
-          <option key={2} value={2}>
-            Pizzas
-          </option>
+          {categories.map((it, index) => (
+            <option key={it.id} value={index}>
+              {it.name}
+            </option>
+          ))}
         </select>
 
         <input
