@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { OrderContext } from "@/providers/order";
 
 export function ModalOrder() {
-  const { onRequestClose } = use(OrderContext);
+  const { onRequestClose, order } = use(OrderContext);
 
   return (
     <dialog className={styles.dialogContainer}>
@@ -18,26 +18,19 @@ export function ModalOrder() {
           <h2 className={styles.h2}>Detalhes do pedido</h2>
 
           <span className={styles.table}>
-            Mesa <b>36</b>
+            Mesa <b>{order[0].oreder.tabel}</b>
           </span>
 
-          <section className={styles.item}>
-            <span>
-              1 - <b>Pizza catupiry</b>
-            </span>
-            <span className={styles.description}>
-              Pizza de frango com catupiry, borda recheada
-            </span>
-          </section>
-
-          <section className={styles.item}>
-            <span>
-              3 - <b>Pizza calabresa</b>
-            </span>
-            <span className={styles.description}>
-              Pizza de frango com catupiry, borda recheada
-            </span>
-          </section>
+          {order.map((it) => (
+            <section className={styles.item} key={it.id}>
+              <span>
+                {it.amount} - <b>{it.product.name}</b>
+              </span>
+              <span className={styles.description}>
+                {it.product.description}
+              </span>
+            </section>
+          ))}
 
           <button className={styles.buttonOrder}>Concluir pedido</button>
         </article>

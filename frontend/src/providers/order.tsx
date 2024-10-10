@@ -18,10 +18,10 @@ interface OrderItemProps {
     banner: string;
     category_id: string;
   };
-  order: {
+  oreder: {
     id: string;
     tabel: number;
-    name: string;
+    name: string | null;
     draft: boolean;
     status: boolean;
   };
@@ -29,8 +29,9 @@ interface OrderItemProps {
 
 type OrderContextData = {
   isOpen: boolean;
-  onRequestOpen: (order_id: string) => void;
+  onRequestOpen: (order_id: string) => Promise<void>;
   onRequestClose: () => void;
+  order: OrderItemProps[];
 };
 
 type OrderProviderProps = {
@@ -52,7 +53,7 @@ export function OrderProvider({ children }: OrderProviderProps) {
         order_id,
       },
     });
-    console.log(response.data);
+    setOrder(response.data);
     setIsOpen(true);
   }
 
@@ -61,7 +62,9 @@ export function OrderProvider({ children }: OrderProviderProps) {
   }
 
   return (
-    <OrderContext.Provider value={{ isOpen, onRequestOpen, onRequestClose }}>
+    <OrderContext.Provider
+      value={{ isOpen, onRequestOpen, onRequestClose, order }}
+    >
       {children}
     </OrderContext.Provider>
   );
