@@ -28,4 +28,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     .json({ status: "error", message: "Internal server error" });
 });
 
-app.listen(3333, () => console.log("Server online"));
+app.listen(process.env.PORT, () => console.log("Server online"));
