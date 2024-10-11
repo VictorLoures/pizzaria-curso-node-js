@@ -1,11 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = require("express");
-const multer_1 = __importDefault(require("multer"));
 const CreateUserController_1 = require("./controllers/user/CreateUserController");
 const AuthUserController_1 = require("./controllers/user/AuthUserController");
 const DetailUserController_1 = require("./controllers/user/DetailUserController");
@@ -13,7 +9,6 @@ const isAuthenticated_1 = require("./middlewares/isAuthenticated");
 const CreatecategoryController_1 = require("./controllers/category/CreatecategoryController");
 const ListCategoryController_1 = require("./controllers/category/ListCategoryController");
 const CreateProductController_1 = require("./controllers/product/CreateProductController");
-const multer_2 = __importDefault(require("./config/multer"));
 const ListByCategoryController_1 = require("./controllers/product/ListByCategoryController");
 const CreateOrderController_1 = require("./controllers/order/CreateOrderController");
 const RemoveOrderController_1 = require("./controllers/order/RemoveOrderController");
@@ -25,7 +20,7 @@ const DetailOrderController_1 = require("./controllers/order/DetailOrderControll
 const FinishOrderController_1 = require("./controllers/order/FinishOrderController");
 const router = (0, express_1.Router)();
 exports.router = router;
-const upload = (0, multer_1.default)(multer_2.default.upload("./tmp"));
+// const upload = multer(uploadConfig.upload("./tmp"));
 // Rotas user
 router.post("/users", new CreateUserController_1.CreateUserController().handle);
 router.post("/session", new AuthUserController_1.AuthUserController().handle);
