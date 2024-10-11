@@ -2,7 +2,9 @@
 
 import { getCookieClient } from "@/lib/cookieClient";
 import { api } from "@/services/api";
+import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useState } from "react";
+import { toast } from "sonner";
 
 interface OrderItemProps {
   id: string;
@@ -32,6 +34,7 @@ type OrderContextData = {
   onRequestOpen: (order_id: string) => Promise<void>;
   onRequestClose: () => void;
   order: OrderItemProps[];
+  finishOrder: (order_id: string) => Promise<void>;
 };
 
 type OrderProviderProps = {
@@ -41,6 +44,7 @@ type OrderProviderProps = {
 export const OrderContext = createContext({} as OrderContextData);
 
 export function OrderProvider({ children }: OrderProviderProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [order, setOrder] = useState<OrderItemProps[]>([]);
 
@@ -61,9 +65,29 @@ export function OrderProvider({ children }: OrderProviderProps) {
     setIsOpen(false);
   }
 
+  async function finishOrder(order_id: string) {
+    const data = {
+      order_id,
+    };
+
+    try {
+      await api.put("order/finish", data, {
+        headers: {
+          Authorization: `Bearer ${getCookieClient()}`,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return;
+    }
+    toast.success("Pedido finalizado com sucesso!");
+    router.refresh();
+    setIsOpen(false);
+  }
+
   return (
     <OrderContext.Provider
-      value={{ isOpen, onRequestOpen, onRequestClose, order }}
+      value={{ isOpen, onRequestOpen, onRequestClose, order, finishOrder }}
     >
       {children}
     </OrderContext.Provider>
